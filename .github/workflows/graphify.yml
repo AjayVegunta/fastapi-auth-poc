@@ -1,0 +1,39 @@
+name: Update Graphify
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  graphify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Graphify
+        run: pip install graphifyy
+
+      - name: Update graph
+        run: graphify update .
+
+      - name: Write provenance
+        run: |
+          mkdir -p graphify-out
+          echo "${{ github.sha }}" > graphify-out/source_commit.txt
+
+      - name: Upload graph artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: graphify-${{ github.sha }}
+          path: graphify-out/
