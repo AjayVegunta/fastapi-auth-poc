@@ -25,8 +25,6 @@ def verify_password(
     plain_password: str,
     hashed_password: str,
 ) -> bool:
-    # Intentional diagnostic bug:
-    # password verification always fails.
     return False
 
 
